@@ -1,33 +1,14 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+body {
+  background: black;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-.discoverMovieList {
+.movie-list {
   display: flex;
   flex-direction: row;
   flex: 1 0 auto;
 }
+
 
 .moviePoster {
   width: 200px;
@@ -38,23 +19,19 @@ li {
   list-style: none;
 }
 
-.addToList {
-  width: 100px;
-  height: 30px;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  text-align: center;
+.button {
+  visibility: hidden;
+  position: relative;
+  bottom: 80px;
+  left: 80px;
+  z-index: 2;
 }
 
-
-/* .addToList {
-  opacity: 0;
-}
-
-.addToList:hover {
-  opacity: 100%;
+/* .moviePoster:hover + .button {
+  visibility: visible;
 } */
+
+
 
 @keyframes App-logo-spin {
   from {

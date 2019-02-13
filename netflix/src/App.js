@@ -1,26 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import './components/discover.js';
+import MovieList from './components/movielist';
+import { connect } from 'react-redux';
+import { addToFavs, removeFromFavs, fetchAllMovies } from './actions.js';
 
+class App extends Component {
 
-class Discover extends Component {
   
-  constructor(props) {
-    super(props);
-    this.state = {
-      discover: [],
-      mylist: []
-    };
-  }
-
-  fetchDiscoverMovies() {
+  fetchDiscoverMovies = () => {
     let url = 'https://movied.herokuapp.com/discover';
     fetch(url)
-      .then(res => res.json())
-      .then((movies) => {
-        this.setState({
-          discover: movies
-        })
+    .then(res => res.json())
+    .then((res) => {
+        this.props.fetchAllMovies(res);
     })
   }
 
@@ -28,54 +20,33 @@ class Discover extends Component {
     this.fetchDiscoverMovies()
   }
 
-  addToList(data) {
-    const newArray = this.state.mylist.slice();
-    newArray.push(data);
-    this.setState({
-      mylist: newArray
-    })
-  }
-
-  render() {
-    const { discover } = this.state;
-    const { mylist } = this.state;
-
-    const movieUrl = 'https://image.tmdb.org/t/p/w300';
-    return (
-      <div>
-        <ul className="discoverMovieList">  
-          {discover.map(movie => 
-            <li key={movie.id} className="discoverMovie">
-              <img src={movieUrl + movie.poster_path} alt='poster' className="moviePoster"/>
-              <button className='addToList' onClick={() => this.addToList(movie)}>Add to List</button>
-            </li>
-          )}
-        </ul>
-        <ul className="myMovieList">  
-          {mylist.map(movie => 
-            <li key={movie.id} className="myMovie">
-              <h1>Hello</h1>
-              <img src={movieUrl + movie.poster_path} alt='poster' className="moviePoster"/>
-            </li>
-          )}
-        </ul>
-      </div>   
-    );
-  }
-}
-
-class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>My Movies</h1>
-        <Discover listName ='mymovies'/>
-        <h1>Box Office Movies</h1>
-        <Discover listName ='discovermovies'/>
+      <h1>Box Office Movies</h1>
+      <div className="movie-list"><MovieList movies = {this.props.discoverList}/></div>
+      
+      <h1>My Favorite Movies</h1>
+        {this.props.myList.length === 0
+        ? <div></div>
+        : <div class="movie-list"><MovieList movies = {this.props.myList}/></div>
+        }
+
       </div>
     );
   }
 }
 
+  const mapStateToProps = (state) => ({
+    discoverList: state.discoverList,
+    myList: state.myList
+  })
 
-export default App;
+  const mapDispatchToProps = (dispatch) => ({
+    fetchAllMovies: (movies) => dispatch(fetchAllMovies(movies)),
+    addToFavs: (movie) => dispatch(addToFavs(movie)),
+    removeFromFavs: (movie) => dispatch(removeFromFavs(movie))
+  })
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
