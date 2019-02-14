@@ -7,6 +7,7 @@ const discoverList = (state = [], action) => {
       ...state,
       ...action.movies
     ]
+    
   default:
     return state;
   }
@@ -14,26 +15,26 @@ const discoverList = (state = [], action) => {
 
 const myList = (state = [], action) => {
   switch(action.type) {
+    
     case 'ADD_MOVIE':
-      // state.forEach(movie => {
-      //   if (movie.id === action.id) return state;
-      // })
-      return [
-        {
-          id: action.id,
-          poster_path: action.poster_path,
-          favorite_movie: true
-        }, ...state
-      ];
+    for (let i = 0; i < state.length; i++) {
+      if (state[i].id === action.id) {
+        return state;
+      }
+    }
+
+    return [
+      ...state,
+      {
+        id: action.id,
+        poster_path: action.poster_path,
+        favorite_movie: true
+      }
+    ];
+
     case 'REMOVE_MOVIE':
       const currentList = [...state];
-      for (let i = 0; i < currentList.length; i++) {
-        if (currentList[i].id === action.id) {
-          currentList[i].favorite_movie = false;
-          return currentList.splice(currentList[i], 1);
-        }
-      }
-      return currentList;
+      return currentList.filter((movie) => movie.id !== action.id);
     default:
       return state;
   }
